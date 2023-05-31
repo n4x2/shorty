@@ -7,6 +7,7 @@ import (
 	"github.com/joho/godotenv"
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 // NewDB creates a new database connection.
@@ -17,7 +18,9 @@ func NewDB() *gorm.DB {
 	}
 
 	// Open a new connection to database using DSN from environment.
-	db, err := gorm.Open(mysql.Open(os.Getenv("DSN")), &gorm.Config{})
+	db, err := gorm.Open(mysql.Open(os.Getenv("DSN")), &gorm.Config{
+		Logger: logger.Default.LogMode(logger.Info),
+	})
 	if err != nil {
 		log.Fatalf("failed to connect to PlanetScale: %v", err)
 	}

@@ -1,12 +1,11 @@
 package model
 
-import "gorm.io/gorm"
-
+// Url represents a URL entity.
 type Url struct {
 	ID       uint   `gorm:"primary_key" json:"id"`
 	LongUrl  string `json:"long_url"`
 	ShortUrl string `json:"short_url"`
-	gorm.Model
 }
 
+// TableName specifies the table name for the Url model in the database.
 func (Url) TableName() string { return "urls" }

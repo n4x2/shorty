@@ -3,7 +3,6 @@ package util
 import (
 	"crypto/rand"
 	"encoding/hex"
-	"os"
 )
 
 // ShortenURL generates a shortened URL based on the provided long URL.
@@ -14,11 +13,6 @@ func ShortenURL(longURL string) string {
 
 	// Take the first 8 characters of the hash as the shortened URL
 	shortURL := hash[:8]
-
-	baseURL := os.Getenv("baseURL")
-	if baseURL != "" {
-		shortURL = baseURL + "/" + shortURL
-	}
 
 	return shortURL
 }

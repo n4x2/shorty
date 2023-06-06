@@ -2,6 +2,7 @@ package controller
 
 import (
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 	"github.com/n4x2/shorty/internal/util"
@@ -18,6 +19,7 @@ type urlController struct {
 type Url interface {
 	GetUrls(c *gin.Context) error
 	CreateUrl(c *gin.Context) error
+	FindByShortUrl(c *gin.Context) error
 }
 
 // NewUrlController creates a new URL controller with the given use case.
@@ -53,6 +55,19 @@ func (uc *urlController) CreateUrl(c *gin.Context) error {
 		return err
 	}
 
-	c.JSON(http.StatusOK, gin.H{"shortUrl": params.ShortUrl})
+	c.JSON(http.StatusOK, gin.H{"shortUrl": os.Getenv("baseURL") + "/" + params.ShortUrl})
+	return nil
+}
+
+func (uc *urlController) FindByShortUrl(c *gin.Context) error {
+	shortURL := c.Param("shortURL")
+
+	u, err := uc.urlUsecase.FindByShortUrl(shortURL)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"error": "URL not found"})
+		return err
+	}
+
+	c.Redirect(http.StatusMovedPermanently, u.LongUrl)
 	return nil
 }

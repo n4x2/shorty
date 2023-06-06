@@ -9,4 +9,7 @@ type UrlRepository interface {
 
 	// Create creates a new URL record and returns the created URL.
 	Create(u *model.Url) (*model.Url, error)
+
+	// FindByShortURL retrive long url by short url.
+	FindByShortUrl(shortURL string) (*model.Url, error)
 }

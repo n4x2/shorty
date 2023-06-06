@@ -17,6 +17,7 @@ type urlUsecase struct {
 type Url interface {
 	List(u []*model.Url) ([]*model.Url, error)
 	Create(u *model.Url) (*model.Url, error)
+	FindByShortUrl(shortURL string) (*model.Url, error)
 }
 
 // NewUrlUsecase creates a new URL use case with the given repositories.
@@ -47,6 +48,15 @@ func (uu *urlUsecase) Create(u *model.Url) (*model.Url, error) {
 		return nil, errors.New("cast error")
 	}
 
+	if err != nil {
+		return nil, err
+	}
+
+	return url, nil
+}
+
+func (uu *urlUsecase) FindByShortUrl(shortUrl string) (*model.Url, error) {
+	url, err := uu.urlRepository.FindByShortUrl(shortUrl)
 	if err != nil {
 		return nil, err
 	}

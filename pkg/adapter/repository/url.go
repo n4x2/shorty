@@ -1,6 +1,8 @@
 package repository
 
 import (
+	"errors"
+
 	"github.com/n4x2/shorty/pkg/domain/model"
 	"github.com/n4x2/shorty/pkg/usecase/repository"
 	"gorm.io/gorm"
@@ -32,4 +34,18 @@ func (ur *urlRepository) Create(u *model.Url) (*model.Url, error) {
 	}
 
 	return u, nil
+}
+
+// FindByShortUrl retrieves a URL by its short URL.
+func (ur *urlRepository) FindByShortUrl(shortURL string) (*model.Url, error) {
+	var u model.Url
+
+	if err := ur.db.Where("short_url = ?", shortURL).First(&u).Error; err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, errors.New("URL not found")
+		}
+		return nil, err
+	}
+
+	return &u, nil
 }

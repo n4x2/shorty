@@ -14,6 +14,7 @@ func NewRouter(r *gin.Engine, c controller.AppController) *gin.Engine {
 	// Define the URL routes and their corresponding controller methods.
 	r.POST("/url", func(ctx *gin.Context) { c.Url.CreateUrl(ctx) })
 	r.GET("/urls", func(ctx *gin.Context) { c.Url.GetUrls(ctx) })
+	r.GET("/:shortURL", func(ctx *gin.Context) { c.Url.FindByShortUrl(ctx) })
 
 	return r
 }
